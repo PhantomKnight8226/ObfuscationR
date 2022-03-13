@@ -1,0 +1,94 @@
+-- If you reading this i really don't care that you have the source and the webhook, people can already use a HTTP spy even if it was obfuscated so spam it all you want you skid
+
+local http_request
+
+pcall(function()
+
+if syn then
+  http_request = syn.request;
+elseif request then
+  http_request = request;
+elseif http.request then
+  http_request = http.request;
+elseif SENTINEL_V2 then
+  function http_request(tb)
+    return {
+        StatusCode = 200;
+        Body = request(tb.Url, tb.Method, (tb.Body or ''))
+    }
+  end
+end
+
+end)
+
+if (not http_request) then
+ return game:GetService("Players").LocalPlayer:Kick("This exploit is not supported, please check the list of supported exploits")
+end
+
+if identifyexecutor then
+ game.StarterGui:SetCore("SendNotification", {
+  Title = "Whitelist loaded!",
+  Text = "Executor Used: " .. identifyexecutor()
+ })
+end
+
+local body = http_request({Url = 'https://hwidez.bigmanbeasty.repl.co'; Method = 'GET'}).Body;
+
+local webhookcheck =
+is_sirhurt_closure and "Sirhurt" or pebc_execute and "ProtoSmasher" or syn and "Synapse X" or isexecutorclosure and "Script-Ware V2" and
+secure_load and "Sentinel" or
+KRNL_LOADED and "Krnl" or
+SONA_LOADED and "Sona" or
+("shitSploit v1")
+
+local url =
+"https://discord.com/api/webhooks/948131778747564073/KSWFcjC4fRr-B8BCWt723_DDu-AkDqzne3YkZrCNVgkNCy7gt7zBD6btTtU7XnL6Z6bV"
+local data = {
+["embeds"] = {
+ {
+     ["type"] = "rich",
+     ["color"] = tonumber(0x7269da),
+     ["image"] = {
+         ["url"] = ""
+     },
+     ["author"] = {
+         ["name"] = "".. game.Players.LocalPlayer.Name .. " just executed your script, HWID is " .. body,
+         ["icon_url"] = "https://www.roblox.com/Thumbs/Avatar.ashx?x=48&y=48&username=" .. game.Players.LocalPlayer.Name,
+     },
+     ["fields"] = {
+         {
+             ["name"] = "**Profile Link:**",
+             ["value"] = "https://www.roblox.com/users/" ..
+                 tostring(game:GetService("Players").LocalPlayer.UserId) .. "/profile",
+             ["inline"] = false
+         },
+         {
+             ["name"] = "**Executer:**",
+             ["value"] = webhookcheck,
+             ["inline"] = true
+         },
+         {
+             ["name"] = "**Game Link:**",
+             ["value"] = "https://www.roblox.com/games/" .. tostring(game.PlaceId) .. "/",
+             ["inline"] = true
+         },
+         {
+             ["name"] = "**Account Age: **",
+             ["value"] = tostring(game:GetService("Players").LocalPlayer.AccountAge),
+             ["inline"] = false
+         }
+     }
+ }
+}
+}
+local newdata = game:GetService("HttpService"):JSONEncode(data)
+
+local headers = {
+["content-type"] = "application/json"
+}
+
+request = http_request or request or HttpPost or syn.request
+local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
+request(abcdef)
+
+game.Players.LocalPlayer:Kick("HWID has been sent to ReaperHacks#1337.")
